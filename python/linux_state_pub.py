@@ -57,7 +57,10 @@ class LinuxStatePub:
             msg.uptime=time.time()-psutil.boot_time()
             msg.memory_use=psutil.virtual_memory().used/(1024*1024)
 
-            self.lcm.publish(topic, msg.encode())
+            try:
+                self.lcm.publish(topic, msg.encode())
+            except IOError, e:
+                print e
             time.sleep(.5)
 
 
