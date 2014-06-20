@@ -2,11 +2,17 @@
 The zumocrawler is a small scale robotic sandcrawler.
 
 ## Getting Started
+0. Setup the mbed
 1. Install linux on the ODROIDs
 2. Configure networking (if needed)
 3. Install necessary software on host computer and on ODROIDs
 4. Configure robots and scripts
 
+
+### Mbed setup
+Use the mbed IDE to deploy the following code to the mbed:
+
+http://mbed.org/users/ajc/code/RPC_Serial/
 
 
 ###Linux Installation
