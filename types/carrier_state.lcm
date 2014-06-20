@@ -1,0 +1,6 @@
+package fearing;
+
+struct carrier_state {
+    header header;
+    float battery_voltage;
+}
