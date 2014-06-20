@@ -73,7 +73,11 @@ class ZC_Carrier:
             vin=ain*(4.99+15.8) / 4.99
             volt=.9*volt + .1*vin
             msg.battery_voltage=volt
-            self.lcm.publish(topic, msg.encode())
+            
+            try:
+                self.lcm.publish(topic, msg.encode())
+            except IOError, e:
+                print e
             time.sleep(.5)
 
 
