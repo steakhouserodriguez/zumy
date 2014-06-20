@@ -1,0 +1,10 @@
+package fearing;
+
+struct linux_state {
+    header header;
+    int64_t uptime;
+    float load_average[3];
+    float cpu_use[4];
+    int64_t memory_use;
+    int32_t temp;
+}
