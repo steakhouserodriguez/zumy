@@ -73,6 +73,27 @@ https://code.google.com/p/lcm/wiki/BuildInstructions.
 
 Be sure to copy lcm.jar into the repo to take advantage of packet introspection with lcm-spy.
 
+When using more than one network interface, (ie. eth0 and wlan0), be sure to manually specify the route for the udp multicast address.
+For example:
+```sh
+ajc@rektjc:~$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         10.10.64.1      0.0.0.0         UG    0      0        0 wlan0
+10.10.64.0      *               255.255.252.0   U     2      0        0 wlan0
+10.42.0.0       *               255.255.255.0   U     1      0        0 eth0
+link-local      *               255.255.0.0     U     1000   0        0 eth0
+192.168.1.0     *               255.255.255.0   U     2      0        0 wlan2
+192.168.56.0    *               255.255.255.0   U     0      0        0 vboxnet0
+239.255.76.67   *               255.255.255.255 UH    0      0        0 wlan2
+```
+
+##### Setting your route in network manager:
+
+Right click Network Manager Applet > Edit Connections > Wireless > fearing-robonet > IPv4 Settings > Routes... > Add "Address"=239.255.76.67, "Netmask"=255.255.255.255, leave "Gateway" and "Metric" blank.
+"Use this connection only for resources on its network" works if you want to connect to the internet with another interface.
+
+
 ### Configuration
 
 Configuration defines what nodes are autostarted, and how the zumocrawlers address themselves in python.
