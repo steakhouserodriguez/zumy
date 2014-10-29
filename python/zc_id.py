@@ -19,7 +19,7 @@ Created on Thu Jun 19 16:57:50 2014
 import os
 
 def get_id():
-    files='/home/ajc/zc_id', '/home/odroid/zc_id'
+    files='/home/ajc/zc_id', '/home/odroid/zc_id', '/home/bml/zc_id'
     for f in files:
         if os.path.exists(f):
             txt=open(f)

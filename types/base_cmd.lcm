@@ -1,0 +1,7 @@
+package fearing;
+
+struct base_cmd {
+    header header;
+    float left_cmd;
+    float right_cmd;
+}
