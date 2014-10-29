@@ -6,21 +6,15 @@ RobotCodeSetup
 * Serial Login
 * Networking Login
 * Robot Test Setup
-
+* Setup Robust Networking
 
 ## ODROID imaging
 http://nbviewer.ipython.org/github/biomimetics/bml_tools/blob/master/arm_linux/odroid_imaging.ipynb
 
 ## Serial Login
-1. Plug in the USB-UART cable; UART into the ODROID, USB into your laptop.
-  <img src="http://dn.odroid.com/homebackup/201206301837550501.jpg" height="100" width="100">
-
-2. Log in using screen  
-  ```sh
-  $ screen /dev/ttyUSB0 115200
-  ```
-3. Press Enter, you should see a root terminal.
-
+```sh
+$ screen /dev/ttyUSB0 115200
+```
 
 ## Network Login
 Networking login requires network configuration and installing ssh.
@@ -28,7 +22,7 @@ Networking login requires network configuration and installing ssh.
 ### Networking
 
 Configure the networking settings using the serial terminal.
-The robot linux boards are configured using manual networking, defined under /etc/network/interfaces.
+The robot linux boards are configured using manual networking, defined under `/etc/network/interfaces`.
 
 Example settings:
 
@@ -58,15 +52,21 @@ You may need to comment out the contents of /etc/network/interfaces.d/eth0:
 # iface eth0 inet dhcp
 ```
 
-Now, reboot the board:
-```sh
-$ shutdown -r 0
-```
+1. Edit these files with nano:
+    ```sh
+    $ nano /etc/network/interfaces
+    $ nano /etc/networking/interfaces.d/eth0
+    ```
 
-On your development machine, you should be able to ping the machine:
-```sh
-$ ping 192.168.1.122
-```
+2. Reboot the board:
+    ```sh
+    $ shutdown -r 0
+    ```
+
+3. On your development machine, you should be able to ping the machine:
+    ```sh
+    $ ping 192.168.1.122
+    ```
 
 N.B: wireless adapters are given unique interface names (ie. wlan0, wlan1) based on their MAC addresses, so once the boards are configured, the wireless adapters cannot be arbitrarily swapped.
 
@@ -101,7 +101,7 @@ $ ssh bml@192.168.1.122
 
 3. Install package requirements for zumy ipython node
   ```sh
-  $ sudo apt-get install python-pip ipython-notebook python-serial python-numpy python-scipy byobu git
+  $ sudo apt-get install python-dev python-pip ipython-notebook python-serial python-numpy python-scipy byobu git
   ```
 
 4. Launch byobu (allows you to run a persistent, multiplexed terminal session)
@@ -120,10 +120,52 @@ $ ssh bml@192.168.1.122
 6. In byobu, launch ipython notebook:
   ```sh
   $ cd ~/zumy/notebook
-  $ ipython notebook ip=*
+  $ ipython notebook --ip=* --no-browser
   ```
 
 7. Open http://192.168.1.122:8888 in a browser on your laptop
-8. Follow the instructions in the RobotCodeSetup.ipynb notebook.
+8. Follow the instructions in the Robot Test.ipynb notebook.
  
+## Setup Robust Networking
+1. Install `netstarter.py` dependencies:
+    ```sh
+    $ sudo pip install netifaces
+    ```
 
+2. Test the restarting script:
+    ```sh
+    $ sudo python ~/zumy/python/netstarter.py
+    ```
+
+3. Make a symblink:
+    ```sh
+    $ ln -s ~/zumy/start_scripts/odroid_init.sh ~/autostart.sh
+    ```
+    This will make it easy to change the code that runs on boot.
+
+4. Setup the script to run automatically at boot:
+    Edit `/etc/rc.local`:
+    ```
+    #!/bin/sh -e
+    #
+    # rc.local
+    #
+    # This script is executed at the end of each multiuser runlevel.
+    # Make sure that the script will "exit 0" on success or any other
+    # value on error.
+    #
+    # In order to enable or disable this script just change the execution
+    # bits.
+    #
+    # By default this script does nothing.
+    
+    /home/bml/autostart.sh&
+    
+    exit 0
+    ```
+    To be clear, we're adding the `/home/bml/autostart.sh&` line.
+
+5. Reboot, and verify that wireless is robust-ish.
+    ```sh
+    $ sudo shutdown -r 0
+    ```
