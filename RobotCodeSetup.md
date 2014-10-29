@@ -14,6 +14,7 @@ http://nbviewer.ipython.org/github/biomimetics/bml_tools/blob/master/arm_linux/o
 
 ## Serial Login
 ```sh
+$ sudo apt-get install screen
 $ screen /dev/ttyUSB0 115200
 ```
 
@@ -85,8 +86,9 @@ $ sudo apt-get install openssh-server
 ```
 After this, you should be able to login to the board over the network using
 
-```sh
-$ ssh bml@192.168.1.122
+```sh 
+$ sudo apt-get install openssh-client   # run this on the ground station
+$ ssh bml@192.168.1.122                 # run this on the ground station
 ```
 
 ## Robot Test Setup
