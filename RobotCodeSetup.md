@@ -5,8 +5,6 @@ RobotCodeSetup
 * Image the ODROID with Linux
 * Serial Login
 * Networking Login
-* Install useful software
-* Install LCM
 * Robot Test Setup
 
 
