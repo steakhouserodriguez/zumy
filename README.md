@@ -1,5 +1,5 @@
-# zumocrawler
-The zumocrawler is a small scale robotic sandcrawler.
+# zumy
+Zumy is a small robot running linux using Pololu's Zumo robot chassis.
 
 ## Getting Started
 0. Setup the mbed
