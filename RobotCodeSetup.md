@@ -188,51 +188,32 @@ $ ssh bml@192.168.1.122                 # run this on the ground station
     $ sudo checkinstall (install package as lcm)
     $ sudo ldconfig
     ```
-2. Configure Your Networking for LCM:
 
-    When using more than one network interface, (ie. eth0 and wlan0), be sure to manually specify the route for the udp multicast address.
-    For example:
-    ```sh
-    ajc@rektjc:~$ route
-    Kernel IP routing table
-    Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-    default         10.10.64.1      0.0.0.0         UG    0      0        0 wlan0
-    10.10.64.0      *               255.255.252.0   U     2      0        0 wlan0
-    10.42.0.0       *               255.255.255.0   U     1      0        0 eth0
-    link-local      *               255.255.0.0     U     1000   0        0 eth0
-    192.168.1.0     *               255.255.255.0   U     2      0        0 wlan2
-    192.168.56.0    *               255.255.255.0   U     0      0        0 vboxnet0
-    239.255.76.67   *               255.255.255.255 UH    0      0        0 wlan2
-    ```
-    Setup in Network Manager:
-    Right click Network Manager Applet > Edit Connections > Wireless > fearing-robonet > IPv4 Settings > Routes... > Add "Address"=239.255.76.67, "Netmask"=255.255.255.255, leave "Gateway" and "Metric" blank.
-"Use this connection only for resources on its network" works if you want to connect to the internet with another interface.
-
-3. Name the robot's id:
+2. Name the robot's id:
     ```sh
     $ echo '/040' > ~/zc_id
     ```
 
-4. generate lcm types:
+3. generate lcm types:
     ```sh
     $ cd ~/zumy
     $ ./gen_types.sh
     ```
 
-5. run `zumy_lcm_node.py`
+4. run `zumy_lcm_node.py`
     ```sh
     $ python ~/zumy/python/zumy_lcm_node.py
     ```
 
-6. In a separate terminal on the robot, run:
+5. In a separate terminal on the robot, run:
     ```sh
     $ cd ~/zumy/notebook/
     $ ipython notebook --ip=* --no-browser
     ```
 
-7. Open http://192.168.1.122:8888/notebooks/Zumy%20LCM%20Node%20Test.ipynb in a browser window.
+6. Open http://192.168.1.122:8888/notebooks/Zumy%20LCM%20Node%20Test.ipynb in a browser window.
 
-8. Edit `start_scripts/odroid_init.sh`, see this:
+7. Edit `start_scripts/odroid_init.sh`, see this:
     ```
     #!/bin/bash
     #
@@ -247,4 +228,4 @@ $ ssh bml@192.168.1.122                 # run this on the ground station
     ```
     The line with `zumy_lcm_node` should autostart `zumy_lcm_node.py` on boot.
     
-9. Reboot the robot, and run `lcm_spy.sh` to see some diagnostic messages from the robot.
+8. Reboot the robot, and run `lcm_spy.sh` to see some diagnostic messages from the robot.
