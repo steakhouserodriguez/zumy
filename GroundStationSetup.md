@@ -3,7 +3,7 @@ Ground Station Setup
 Ground station = development machine.
 
 # Overview
-* Useful Scripts
+* Useful Software
 * LCM
 * IPython
 * ROS
@@ -53,15 +53,15 @@ $ sshfs bml@192.168.1.122:/home/bml 122
 $ ls 122
 ```
 
-
-
 ## LCM
 
 ### Build & Setup Instructions
 (copied from [Robot Code Setup](RobotCodeSetup.md))
+
 1. Install LCM:
 
     see https://code.google.com/p/lcm/wiki/BuildInstructions and https://github.com/lcm-proj/lcm/blob/master/INSTALL
+
     ```sh
     $ sudo apt-get install build-essential libglib2.0-dev openjdk-6-jdk python-dev checkinstall autoconf autopoint libtool python-psutil
     $ sudo pip install psutil --upgrade
@@ -74,6 +74,7 @@ $ ls 122
     $ sudo checkinstall (install package as lcm)
     $ sudo ldconfig
     ```
+
 2. Configure Your Networking for LCM:
 
     When using more than one network interface, (ie. eth0 and wlan0), be sure to manually specify the route for the udp multicast address.
@@ -90,6 +91,7 @@ $ ls 122
     192.168.56.0    *               255.255.255.0   U     0      0        0 vboxnet0
     239.255.76.67   *               255.255.255.255 UH    0      0        0 wlan2
     ```
+    
     Setup in Network Manager:
     Right click Network Manager Applet > Edit Connections > Wireless > fearing-robonet > IPv4 Settings > Routes... > Add "Address"=239.255.76.67, "Netmask"=255.255.255.255, leave "Gateway" and "Metric" blank.
 "Use this connection only for resources on its network" works if you want to connect to the internet with another interface.
