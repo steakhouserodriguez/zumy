@@ -192,6 +192,7 @@ user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the grou
     see https://code.google.com/p/lcm/wiki/BuildInstructions and https://github.com/lcm-proj/lcm/blob/master/INSTALL
     ```sh
     bml@odroid-server:~$ sudo apt-get install build-essential libglib2.0-dev openjdk-6-jdk python-dev checkinstall autoconf autopoint libtool python-psutil
+    bml@odroid-server:~$ sudo ntpdate ntp.ubuntu.com          # https doesn't work if the time isn't synced.
     bml@odroid-server:~$ sudo pip install psutil --upgrade
     bml@odroid-server:~$ wget https://github.com/lcm-proj/lcm/archive/v1.1.2.tar.gz
     bml@odroid-server:~$ tar xzvf v1.1.2.tar.gz
