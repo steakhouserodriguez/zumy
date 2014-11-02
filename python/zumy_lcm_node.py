@@ -14,6 +14,7 @@ import time
 import threading
 import zc_id
 import lcm
+import lcm_refresh
 
 class ZumyLCMNode:
     def __init__(self, robot, lcm, base_cmd_channel, carrier_state_channel):
@@ -78,7 +79,11 @@ if __name__=='__main__':
     zn.start()
     print 'zumy_lcm_node runnning...'
     
+    lcmr = lcm_refresh.LCM_Refresher()
+    lcmr.start()
+    
     while True:
+        
         lc.handle()
         time.sleep(.01)
 
