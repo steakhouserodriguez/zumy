@@ -209,25 +209,30 @@ user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the grou
     bml@odroid-server:~$ echo '/040' > ~/zc_id
     ```
 
-3. generate lcm types:
+3. copy lcm.jar to zumy:
+    ```sh
+    bml@odroid-server:~$ cp lcm-1.1.2/lcm-java/lcm.jar ~/zumy/
+    ```
+
+4. generate lcm types:
     ```sh
     bml@odroid-server:~$ cd ~/zumy
     bml@odroid-server:~$ ./gen_types.sh
     ```
 
-4. run `zumy_lcm_node.py`
+5. run `zumy_lcm_node.py`
     ```sh
     bml@odroid-server:~$ python ~/zumy/python/zumy_lcm_node.py
     ```
 
-5. In a separate terminal on the robot, run:
+6. In a separate terminal on the robot, run:
     ```sh
     bml@odroid-server:~$ ipython notebook --ip=* --no-browser
     ```
 
-6. Open http://192.168.1.66:8888/ in a browser window, navigate through zumy > notebooks > Zumy LCM Node Test
+7. Open http://192.168.1.66:8888/ in a browser window, navigate through zumy > notebooks > Zumy LCM Node Test
 
-7. Edit `start_scripts/odroid_init.sh`, see this:
+8. Edit `start_scripts/odroid_init.sh`, see this:
     ```
     #!/bin/bash
     #
@@ -242,4 +247,4 @@ user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the grou
     ```
     The line with `zumy_lcm_node` should autostart `zumy_lcm_node.py` on boot.
     
-8. Reboot the robot, See [Ground Station Setup](GroundStationSetup.md) and setup LCM, and try running `lcm-spy.sh` to see the messages the robot broadcasts.
+9. Reboot the robot, See [Ground Station Setup](GroundStationSetup.md) and setup LCM, and try running `lcm-spy.sh` to see the messages the robot broadcasts.
