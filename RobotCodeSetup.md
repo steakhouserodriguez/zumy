@@ -14,8 +14,8 @@ http://nbviewer.ipython.org/github/biomimetics/bml_tools/blob/master/arm_linux/o
 
 ## Serial Login
 ```sh
-$ sudo apt-get install screen
-$ screen /dev/ttyUSB0 115200
+user@dev-machine:~$ sudo apt-get install screen
+user@dev-machine:~$ sudo screen /dev/ttyUSB0 115200
 ```
 
 ## Network Login
@@ -36,9 +36,9 @@ iface lo inet loopback
 #auto eth0
 # iface eth0 inet dhcp
 
-auto wlan1
-iface wlan1 inet static
-address 192.168.1.122
+auto wlan0
+iface wlan0 inet static
+address 192.168.1.66
 netmask 255.255.255.0
 gateway 192.168.1.1
 dns-nameservers 192.168.1.1 8.8.8.8
@@ -49,25 +49,38 @@ wpa-psk fearingrobonet
 You may need to comment out the contents of /etc/network/interfaces.d/eth0:
 
 ```sh
-## /etc/networking/interfaces.d/eth0
+## /etc/network/interfaces.d/eth0
 # auto eth0
 # iface eth0 inet dhcp
 ```
-
-1. Edit these files with nano:
+1. Check the network device names:
     ```sh
-    $ nano /etc/network/interfaces
-    $ nano /etc/networking/interfaces.d/eth0
+    root@odroid-server:~$ ifconfig -a
     ```
 
-2. Reboot the board:
+2. Edit these files with nano:
     ```sh
-    $ shutdown -r 0
+    root@odroid-server:~$ nano /etc/network/interfaces
+    root@odroid-server:~$ nano /etc/network/interfaces.d/eth0
     ```
 
-3. On your development machine, you should be able to ping the machine:
+3. Manually bring up the network and test:
     ```sh
-    $ ping 192.168.1.122
+    root@odroid-server:~$ ifup wlan0
+    root@odroid-server:~$ ping 192.168.1.1
+    ```
+    You should be able to ping the robot from your development machine:
+    ```sh
+    user@dev-machine:~$ ping 192.168.1.66
+    ```
+
+3. Do a reboot test:
+    ```sh
+    root@odroid-server:~$ shutdown -h 0
+    ```
+    Check that the robot is reachable from your development machine:
+    ```sh
+    user@dev-machine:~$ ping 192.168.1.66
     ```
 
 N.B: wireless adapters are given unique interface names (ie. wlan0, wlan1) based on their MAC addresses, so once the boards are configured, the wireless adapters cannot be arbitrarily swapped.
@@ -75,73 +88,74 @@ N.B: wireless adapters are given unique interface names (ie. wlan0, wlan1) based
 ### Add a user
 As root in the serial terminal:
 ```sh
-$ adduser bml           # adds the user
-$ gpasswd -a bml sudo   # adds bml to group sudo, granting administrator privledges
+root@odroid-server:~$ adduser bml           # adds the user
+root@odroid-server:~$ gpasswd -a bml sudo   # adds bml to group sudo, granting administrator privledges
 ```
 
 ### Install openssh server for network login
 
 ```sh
-$ sudo apt-get install openssh-server
+root@odroid-server:~$ sudo apt-get install openssh-server
 ```
 After this, you should be able to login to the board over the network using
 
 ```sh 
-$ sudo apt-get install openssh-client   # run this on the ground station
-$ ssh bml@192.168.1.122                 # run this on the ground station
+user@dev-machine:~ $ sudo apt-get install openssh-client   # run this on the ground station
+user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the ground station
 ```
 
 ## Robot Test Setup
 1. Add permissions to use serial devices
   ```ssh
-  $ sudo gpasswd -a bml dialout
+  bml@odroid-server:~$ sudo gpasswd -a bml dialout
   ```
 
 2. Reboot for permissions to reset
   ```sh
-  $ sudo shutdown -h 0
+  bml@odroid-server:~$ sudo shutdown -h 0
   ```
 
 3. Install package requirements for zumy ipython node
   ```sh
-  $ sudo apt-get install python-dev python-pip ipython-notebook python-serial python-numpy python-scipy byobu git
+  bml@odroid-server:~$ sudo ntpdate ntp.ubuntu.com                         # https doesn't work if the time isn't synced.
+  bml@odroid-server:~$ sudo apt-get install python-dev python-pip ipython-notebook python-serial python-numpy python-scipy byobu git
+  bml@odroid-server:~$ sudo pip install ipython[notebook] --upgrade
   ```
 
 4. Launch byobu (allows you to run a persistent, multiplexed terminal session)
   ```sh
-  $ byobu
+  bml@odroid-server:~$ byobu
   ```
 
 5. Clone the 'zumy' repo:
   ```sh
-  $ sudo ntpdate ntp.ubuntu.com                         # https doesn't work if the time isn't synced.
-  $ git clone https://github.com/andrewjchen/zumy.git
-  $ cd zumy
-  $ git checkout redoc
+  bml@odroid-server:~$ sudo ntpdate ntp.ubuntu.com      # https doesn't work if the time isn't synced.
+  bml@odroid-server:~$ git clone https://github.com/andrewjchen/zumy.git
+  bml@odroid-server:~$ cd zumy
   ```
 
 6. In byobu, launch ipython notebook:
   ```sh
-  $ cd ~/zumy/notebook
-  $ ipython notebook --ip=* --no-browser
+  bml@odroid-server:~ $ ipython notebook --ip=* --no-browser
   ```
 
-7. Open http://192.168.1.122:8888/notebooks/Robot%20Test.ipynb in a browser on your laptop.
+7. Open http://192.168.1.66:8888 in a browser on your laptop, navigate to zumy > notebooks > Robot Test
  
 ## Setup Robust Networking
 1. Install `netstarter.py` dependencies:
     ```sh
-    $ sudo pip install netifaces
+    bml@odroid-server:~$ sudo ntpdate ntp.ubuntu.com          # https doesn't work if the time isn't synced.
+    bml@odroid-server:~$ sudo pip install netifaces
     ```
 
 2. Test the restarting script:
     ```sh
-    $ sudo python ~/zumy/python/netstarter.py
+    bml@odroid-server:~$ sudo python ~/zumy/python/netstarter.py
     ```
 
 3. Make a symblink:
     ```sh
-    $ ln -s ~/zumy/start_scripts/odroid_init.sh ~/autostart.sh
+    bml@odroid-server:~$ ln -s ~/zumy/start_scripts/odroid_init.sh ~/autostart.sh
     ```
     This will make it easy to change the code that runs on boot.
 
@@ -169,7 +183,7 @@ $ ssh bml@192.168.1.122                 # run this on the ground station
 
 5. Reboot, and verify that wireless is robust-ish.
     ```sh
-    $ sudo shutdown -r 0
+    bml@odroid-server:~$ sudo shutdown -h 0
     ```
 
 ## Bringing up `zumy_lcm_node.py`
@@ -177,41 +191,41 @@ $ ssh bml@192.168.1.122                 # run this on the ground station
 
     see https://code.google.com/p/lcm/wiki/BuildInstructions and https://github.com/lcm-proj/lcm/blob/master/INSTALL
     ```sh
-    $ sudo apt-get install build-essential libglib2.0-dev openjdk-6-jdk python-dev checkinstall autoconf autopoint libtool python-psutil
-    $ sudo pip install psutil --upgrade
-    $ wget https://github.com/lcm-proj/lcm/archive/v1.1.2.tar.gz
-    $ tar xzvf v1.1.2.tar.gz
-    $ cd lcm-1.1.2
-    $ ./bootstrap.sh
-    $ ./configure
-    $ make -j4
-    $ sudo checkinstall (install package as lcm)
-    $ sudo ldconfig
+    bml@odroid-server:~$ sudo apt-get install build-essential libglib2.0-dev openjdk-6-jdk python-dev checkinstall autoconf autopoint libtool python-psutil
+    bml@odroid-server:~$ sudo ntpdate ntp.ubuntu.com          # https doesn't work if the time isn't synced.
+    bml@odroid-server:~$ sudo pip install psutil --upgrade
+    bml@odroid-server:~$ wget https://github.com/lcm-proj/lcm/archive/v1.1.2.tar.gz
+    bml@odroid-server:~$ tar xzvf v1.1.2.tar.gz
+    bml@odroid-server:~$ cd lcm-1.1.2
+    bml@odroid-server:~$ ./bootstrap.sh
+    bml@odroid-server:~$ ./configure
+    bml@odroid-server:~$ make -j4
+    bml@odroid-server:~$ sudo checkinstall #(install package as lcm)
+    bml@odroid-server:~$ sudo ldconfig
     ```
 
 2. Name the robot's id:
     ```sh
-    $ echo '/040' > ~/zc_id
+    bml@odroid-server:~$ echo '/040' > ~/zc_id
     ```
 
 3. generate lcm types:
     ```sh
-    $ cd ~/zumy
-    $ ./gen_types.sh
+    bml@odroid-server:~$ cd ~/zumy
+    bml@odroid-server:~$ ./gen_types.sh
     ```
 
 4. run `zumy_lcm_node.py`
     ```sh
-    $ python ~/zumy/python/zumy_lcm_node.py
+    bml@odroid-server:~$ python ~/zumy/python/zumy_lcm_node.py
     ```
 
 5. In a separate terminal on the robot, run:
     ```sh
-    $ cd ~/zumy/notebook/
-    $ ipython notebook --ip=* --no-browser
+    bml@odroid-server:~$ ipython notebook --ip=* --no-browser
     ```
 
-6. Open http://192.168.1.122:8888/notebooks/Zumy%20LCM%20Node%20Test.ipynb in a browser window.
+6. Open http://192.168.1.66:8888/ in a browser window, navigate through zumy > notebooks > Zumy LCM Node Test
 
 7. Edit `start_scripts/odroid_init.sh`, see this:
     ```
@@ -228,4 +242,4 @@ $ ssh bml@192.168.1.122                 # run this on the ground station
     ```
     The line with `zumy_lcm_node` should autostart `zumy_lcm_node.py` on boot.
     
-8. Reboot the robot, and run `lcm_spy.sh` to see some diagnostic messages from the robot.
+8. Reboot the robot, See [Ground Station Setup](GroundStationSetup.md) and setup LCM, and try running `lcm-spy.sh` to see the messages the robot broadcasts.
