@@ -18,6 +18,8 @@ http://nbviewer.ipython.org/github/biomimetics/bml_tools/blob/master/arm_linux/o
 # Set robot ID
 ```sh
 bml@odroid-server:~$ echo '/040' > ~/zc_id
+bml@odroid-server:~$ sudo nano /etc/hostname # rename odroid-server to zumy040
+bml@odroid-server:~$ sudo nano /etc/hosts # rename odroid-server to zumy040
 ```
 
 # Test
