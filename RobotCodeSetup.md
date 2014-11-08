@@ -147,7 +147,7 @@ user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the grou
 
 6. In byobu, launch ipython notebook:
   ```sh
-  bml@odroid-server:~ $ ipython notebook --ip=* --no-browser
+  bml@odroid-server:~/zumy$ ipython notebook --ip=* --no-browser
   ```
 
 7. Open http://192.168.1.66:8888 in a browser on your laptop, navigate to zumy > notebooks > Robot Test
@@ -208,16 +208,18 @@ user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the grou
     bml@odroid-server:~$ wget https://github.com/lcm-proj/lcm/archive/v1.1.2.tar.gz
     bml@odroid-server:~$ tar xzvf v1.1.2.tar.gz
     bml@odroid-server:~$ cd lcm-1.1.2
-    bml@odroid-server:~$ ./bootstrap.sh
-    bml@odroid-server:~$ ./configure
-    bml@odroid-server:~$ make -j4
-    bml@odroid-server:~$ sudo checkinstall #(install package as lcm)
-    bml@odroid-server:~$ sudo ldconfig
+    bml@odroid-server:~/lcm-1.1.2$ ./bootstrap.sh
+    bml@odroid-server:~/lcm-1.1.2$ ./configure
+    bml@odroid-server:~/lcm-1.1.2$ make -j4
+    bml@odroid-server:~/lcm-1.1.2$ sudo checkinstall #(install package as lcm)
+    bml@odroid-server:~/lcm-1.1.2$ sudo ldconfig
     ```
 
 2. Name the robot's id:
     ```sh
     bml@odroid-server:~$ echo '/040' > ~/zc_id
+    bml@odroid-server:~$ sudo nano /etc/hostname # rename odroid-server to zumy044
+    bml@odroid-server:~$ sudo nano /etc/hosts # rename odroid-server to zumy044
     ```
 
 3. copy lcm.jar to zumy:
@@ -228,7 +230,7 @@ user@dev-machine:~ $ ssh bml@192.168.1.66                 # run this on the grou
 4. generate lcm types:
     ```sh
     bml@odroid-server:~$ cd ~/zumy
-    bml@odroid-server:~$ ./gen_types.sh
+    bml@odroid-server:~/zumy$ ./gen_types.sh
     ```
 
 5. run `zumy_lcm_node.py`
