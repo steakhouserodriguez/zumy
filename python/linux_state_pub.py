@@ -6,9 +6,9 @@ Created on Thu Jun 19 17:01:16 2014
 """
 import time
 import threading
-import zc_id
 import psutil
 import lcm
+import socket
 from fearing import header
 from fearing import linux_state
 
@@ -65,7 +65,7 @@ class LinuxStatePub:
 
 
 if __name__=='__main__':
-    id=zc_id.get_id()
+    id=socket.gethostname()
     lc = None
     while lc is None:
         try:

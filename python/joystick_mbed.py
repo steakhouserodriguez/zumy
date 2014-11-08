@@ -7,7 +7,7 @@ Created on Tue Jun  3 11:39:03 2014
 from mbedrpc import *
 import time
 import threading
-import zc_id
+import socket
 import lcm
 from fearing import xbox_joystick_state
 from fearing import header
@@ -82,7 +82,7 @@ class ZC_Carrier:
 
 
 if __name__ == '__main__':
-    id=zc_id.get_id()
+    id=socket.gethostname()
     
     dev='/dev/ttyACM0'
     mb=SerialRPC(dev, 115200)

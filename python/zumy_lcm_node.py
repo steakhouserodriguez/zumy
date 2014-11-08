@@ -9,10 +9,10 @@ from mbedrpc import *
 from fearing import base_cmd
 from fearing import carrier_state
 from fearing import header
+import socket
 import zumy
 import time
 import threading
-import zc_id
 import lcm
 import lcm_refresh
 
@@ -58,7 +58,7 @@ if __name__=='__main__':
     z.cmd(.1,.1)
     z.cmd(0,0)
 
-    rid = zc_id.get_id()
+    rid = socket.gethostname()
     cmd_channel='{0}/base_cmd'.format(rid)
     health_channel='{0}/carrier_state'.format(rid)
     
