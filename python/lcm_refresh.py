@@ -23,9 +23,9 @@ class LCM_Refresher:
     def _loop(self):
         while True:
             passes, fails =  self._ns.tick()
-            print passes, fails
+            # print passes, fails
             if passes < 50 and passes % 10 is 0:
-                print 'refreshing lcm...'
+                # print 'refreshing lcm...'
                 try:
                     lc = lcm.LCM('udpm://239.255.76.67:7667?ttl=1')
                 except RuntimeError as e:
